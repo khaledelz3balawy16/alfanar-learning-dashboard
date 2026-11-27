@@ -515,7 +515,7 @@ class LectureLibraryTests(TestCase):
 
     def test_onedrive_stream_uses_exact_item_reference(self):
         requests = []
-        fake = SimpleNamespace(_token="CHANGE_ME", authenticate=lambda: None,
+        fake = SimpleNamespace(_token='CHANGE_ME', authenticate=lambda: None,
                                _opener=SimpleNamespace(open=lambda request, timeout: requests.append(request) or io.BytesIO(b"video")))
         asset = SimpleNamespace(provider="onedrive", drive_id="drive!id", source_id="item/id")
         open_recording(asset, "bytes=0-8", client=fake)
@@ -553,7 +553,7 @@ class LectureLibraryTests(TestCase):
         asset = LectureResource.objects.get(kind="recording")
         upstream = io.BytesIO(b"mp4-bytes")
         upstream.status = 206
-        upstream.headers = {"Content-Length": "9", "Content-Range": "bytes 0-8/100", "Location": "https://private.invalid/signed", "Authorization": "CHANGE_ME"}
+        upstream.headers = {"Content-Length": "9", "Content-Range": "bytes 0-8/100", "Location": "https://private.invalid/signed", "Authorization": 'CHANGE_ME'}
         with mock.patch("analytics.lectures.media.open_recording", return_value=upstream) as opened:
             response = self.client.get(f"{self.url()}/resources/{asset.pk}", HTTP_RANGE="bytes=0-8")
             self.assertEqual(response.status_code, 206)
@@ -573,11 +573,11 @@ class LectureLibraryTests(TestCase):
             if len(requests) == 1:
                 raise urllib.error.HTTPError(request.full_url, 302, "Redirect", {"Location": "https://tenant.sharepoint.com/recording"}, io.BytesIO())
             return io.BytesIO(b"video")
-        fake = SimpleNamespace(_token="CHANGE_ME", authenticate=lambda: None, _opener=SimpleNamespace(open=open_url))
+        fake = SimpleNamespace(_token='CHANGE_ME', authenticate=lambda: None, _opener=SimpleNamespace(open=open_url))
         asset = SimpleNamespace(organizer_id="owner", meeting_id="meeting", source_id="recording")
         with mock.patch("analytics.lectures.media.GraphClient.from_environment", return_value=fake):
             open_recording(asset)
-        self.assertEqual(requests[0].get_header("Authorization"), "Bearer CHANGE_ME")
+        self.assertEqual(requests[0].get_header("Authorization"), 'Bearer CHANGE_ME')
         self.assertIsNone(requests[1].get_header("Authorization"))
         fake._opener.open = lambda *a, **k: (_ for _ in ()).throw(urllib.error.HTTPError("", 302, "", {"Location": "https://untrusted.invalid"}, io.BytesIO()))
         with mock.patch("analytics.lectures.media.GraphClient.from_environment", return_value=fake), self.assertRaises(GraphError):
@@ -585,7 +585,7 @@ class LectureLibraryTests(TestCase):
 
     def test_initial_media_connection_retries_transient_failure_once(self):
         upstream = io.BytesIO(b"video")
-        fake = SimpleNamespace(_token="CHANGE_ME", authenticate=lambda: None, _sleep=mock.Mock(),
+        fake = SimpleNamespace(_token='CHANGE_ME', authenticate=lambda: None, _sleep=mock.Mock(),
                                _opener=SimpleNamespace(open=mock.Mock(side_effect=[urllib.error.URLError("temporary"), upstream])))
         asset = SimpleNamespace(provider="onedrive", drive_id="drive", source_id="item")
         self.assertIs(open_recording(asset, "bytes=0-8", client=fake), upstream)

@@ -31,7 +31,7 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
   let res: Response
   try {
     res = await fetch(`/api/${path}`, {
-      method, headers, credentials: 'CHANGE_ME',
+      method, headers, credentials: 'same-origin',
       body: body === undefined ? undefined : JSON.stringify(body),
     })
   } catch {
@@ -55,7 +55,7 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
 let pendingCheck: Promise<boolean> | null = null
 /** One shared session re-check for any burst of 401/403 responses. */
 function confirmSession(): Promise<boolean> {
-  pendingCheck ??= fetch('/api/auth/session', { credentials: 'CHANGE_ME', headers: { Accept: 'application/json' } })
+  pendingCheck ??= fetch('/api/auth/session', { credentials: 'same-origin', headers: { Accept: 'application/json' } })
     .then((r) => (r.ok ? r.json() : null))
     .then((s) => Boolean(s?.authenticated))
     .catch(() => false)

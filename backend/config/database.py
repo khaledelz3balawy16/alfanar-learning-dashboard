@@ -43,8 +43,8 @@ def isolated_databases(base_dir, environ):
         url = legacy
     schema = environ.get('LECTURE_LIBRARY_DATABASE_SCHEMA') or 'alfanar_lecture_library'
     validate_schema(schema)
-    if schema in {'public', 'alfanar_dashboard'}:
-        raise ImproperlyConfigured('Lecture Library requires its own schema, not public or alfanar_dashboard.')
+    if schema in {'public', 'CHANGE_ME'}:
+        raise ImproperlyConfigured('Lecture Library requires its own schema, not public or CHANGE_ME.')
     if url:
         try:
             database = database_from_url(url, schema)

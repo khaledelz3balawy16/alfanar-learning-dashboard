@@ -40,11 +40,11 @@ class RestorationOwnerTests(TestCase):
 
     def test_active_owner_without_grant_still_requires_backup_and_reviewed_plan(self):
         owner = get_user_model().objects.create_user('owner_review')
-        password = CHANGE_ME
+        password = owner.password
         with self.assertRaisesMessage(CommandError, 'Apply requires a verified backup'):
             self.run_restore(apply=True)
         owner.refresh_from_db()
-        self.assertEqual(CHANGE_ME, password)
+        self.assertEqual(owner.password, password)
         self.assertFalse(DashboardAccess.objects.exists())
 
 

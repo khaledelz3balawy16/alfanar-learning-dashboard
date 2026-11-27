@@ -67,7 +67,7 @@ python manage.py dashboard_user add owner_review --name "Owner Review" --tempora
 python manage.py dashboard_user set-password owner_review
 
 # When authorised emails arrive: one permanent account per approved address
-python manage.py dashboard_user add contact@example.com --email contact@example.com --name "Jane Doe" --set-password
+python manage.py dashboard_user add contact+2e3ac980f350@example.com --email contact+2e3ac980f350@example.com --name "Jane Doe" --set-password
 
 # Then remove the temporary account (deactivates it, revokes access, ends its sessions)
 python manage.py dashboard_user disable owner_review

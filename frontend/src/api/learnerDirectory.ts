@@ -71,7 +71,7 @@ export async function downloadDirectory(filters: DirectoryExportFilters, request
   for (let page = 1; page <= pages; page++) {
     params.set('page', String(page))
     const response = await request(`/api/learners?${params}`, {
-      credentials: 'CHANGE_ME', cache: 'no-store', headers: { Accept: 'application/json' },
+      credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' },
     })
     if (!response.ok) {
       const body = await response.json().catch(() => null)

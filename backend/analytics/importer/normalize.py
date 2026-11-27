@@ -576,7 +576,7 @@ def _combine_enrollments(a: dict, b: dict) -> dict:
 
 
 def _identity_key(value: str) -> str:
-    """Normalize a name or username-style email ("first-lastalfanar-com", "contact@example.com")."""
+    'Normalize a name or username-style email ("first-lastalfanar-com", "contact+3f0ba25d6ea0@example.com").'
     v = re.sub(r"[^a-z0-9]", "", value.lower())
     v = re.sub(r"(alfanar)?(com)?$", "", v)
     return v

@@ -13,18 +13,18 @@ from config.database import database_from_url, validate_schema
 
 class DatabaseConfigurationTests(SimpleTestCase):
     def test_schema_preserves_ssl_and_url_options(self):
-        config = database_from_url("postgresql://synthetic:password@localhost/example?sslmode=require", "alfanar_dashboard")
+        config = database_from_url("postgresql://synthetic:password@localhost/example?sslmode=require", 'CHANGE_ME')
         self.assertEqual(config["OPTIONS"]["sslmode"], "require")
-        self.assertEqual(config["OPTIONS"]["options"], "-c search_path=alfanar_dashboard")
+        self.assertEqual(config["OPTIONS"]["options"], '-c search_path=CHANGE_ME')
 
     def test_no_schema_preserves_existing_connection_behavior(self):
         config = database_from_url("postgresql://synthetic:password@localhost/example")
         self.assertNotIn("options", config.get("OPTIONS", {}))
 
     def test_neon_schema_uses_same_endpoint_direct_route(self):
-        url = "postgresql://synthetic:contact@example.com/example?sslmode=require"
+        url = 'postgresql://synthetic:contact+5312ae3b67eb@example.com/example?sslmode=require'
         pooled = database_from_url(url)
-        direct = database_from_url(url, "alfanar_dashboard")
+        direct = database_from_url(url, 'CHANGE_ME')
         self.assertEqual(pooled["HOST"], "ep-example-pooler.region.aws.neon.tech")
         self.assertEqual(direct["HOST"], "ep-example.region.aws.neon.tech")
         for field in ("USER", "PASSWORD", "NAME", "PORT"):

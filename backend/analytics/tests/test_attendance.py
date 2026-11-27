@@ -141,7 +141,7 @@ class AttendanceImportTests(TestCase):
 
     # ---- API ---------------------------------------------------------------------------
     def client_login(self):
-        u = User.objects.create_user("viewer", password="CHANGE_ME")
+        u = User.objects.create_user("viewer", password='CHANGE_ME')
         DashboardAccess.objects.create(user=u)
         self.client.force_login(u)
 

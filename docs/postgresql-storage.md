@@ -20,7 +20,7 @@ The SQLite default is `backend/db.sqlite3`; relative overrides resolve from the
 repository root. Legacy PostgreSQL `DATABASE_URL` is accepted ONLY as the library
 URL when the explicit library URL is unset. Set the explicit URL for deployment.
 Legacy `DATABASE_SCHEMA` does not control either database. The library rejects
-`public` and `alfanar_dashboard` schemas. Its schema must be dedicated.
+`public` and `CHANGE_ME` schemas. Its schema must be dedicated.
 Without a library URL, library endpoints return HTTP 503; dashboard endpoints
 remain available. SSL URL options are retained. Neon pooler hosts use the
 corresponding direct endpoint for the schema-specific session connection.

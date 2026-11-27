@@ -217,7 +217,7 @@ class NonLearnerExclusionTests(TestCase):
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
         self.assertFalse(Learner.objects.filter(source_id=103).exists())
-        u = User.objects.create_user("viewer", password="CHANGE_ME")
+        u = User.objects.create_user("viewer", password='CHANGE_ME')
         DashboardAccess.objects.create(user=u)
         self.client.force_login(u)
         ids = {r["learner_id"] for r in self.client.get("/api/learners", HTTP_HOST="localhost").json()["results"]}

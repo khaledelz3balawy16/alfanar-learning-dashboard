@@ -254,7 +254,7 @@ class ExportConfigurationTests(SimpleTestCase):
         fake=Mock(service_account_email='writer@example.invalid')
         with patch('google.oauth2.service_account.Credentials.from_service_account_file',return_value=fake) as credentials, \
              patch('google_auth_httplib2.AuthorizedHttp'), patch('googleapiclient.discovery.build'):
-            client=GoogleSheets('synthetic-credential.json','synthetic-spreadsheet')
+            client=GoogleSheets('synthetic-credential.json','CHANGE_ME')
         from analytics.attendance.master_writer import WRITER_SCOPE
         credentials.assert_called_once_with('synthetic-credential.json',scopes=[WRITER_SCOPE])
         self.assertEqual(client.identity,'writer@example.invalid')

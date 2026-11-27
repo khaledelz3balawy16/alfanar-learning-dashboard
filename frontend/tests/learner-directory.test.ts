@@ -164,7 +164,7 @@ test('one download fetches every page with the selected course, search, status a
     assert.equal(url.searchParams.get('engagement'), 'active')
     assert.equal(url.searchParams.get('ordering'), '-progress')
     assert.equal(url.searchParams.get('page_size'), '100')
-    assert.deepEqual(init, { credentials: 'CHANGE_ME', cache: 'no-store', headers: { Accept: 'application/json' } })
+    assert.deepEqual(init, { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } })
     const page = Number(url.searchParams.get('page'))
     return Response.json({ count: 137, pages: 2, page, results: Array.from({ length: page === 1 ? 100 : 37 }, (_, i) => learner((page - 1) * 100 + i + 1)) })
   }) as typeof fetch

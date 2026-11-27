@@ -469,7 +469,7 @@ class GraphClientTests(SimpleTestCase):
         opener = Mock()
         opener.open.side_effect = [io.BytesIO(json.dumps(r).encode()) if isinstance(r, dict) else r for r in responses]
         client = GraphClient(ORGANIZER, ORGANIZER, "synthetic-not-a-secret", opener=opener, sleep=Mock())
-        client._token, client._expires = "CHANGE_ME", float("inf")
+        client._token, client._expires = 'CHANGE_ME', float("inf")
         return client, opener
 
     def test_all_pages_followed_and_identical_duplicates_collapsed(self):
@@ -526,7 +526,7 @@ class GraphClientTests(SimpleTestCase):
                 self.assertEqual([call.args[0] for call in client._sleep.call_args_list],[1,2,4])
 
     def test_credentials_only_sent_to_official_token_endpoint_and_kept_in_memory(self):
-        client, opener = self.build_client([{"access_token": "CHANGE_ME", "expires_in": 3600}])
+        client, opener = self.build_client([{"access_token": 'CHANGE_ME', "expires_in": 3600}])
         client._token = None
         client.authenticate()
         request = opener.open.call_args.args[0]
@@ -538,7 +538,7 @@ class GraphClientTests(SimpleTestCase):
     def test_expired_token_refreshes_once_without_exposing_auth_errors(self):
         expired = urllib.error.HTTPError("https://graph.microsoft.com", 401, "expired", {},
                                          io.BytesIO(b'{"error":{"code":"InvalidAuthenticationToken"}}'))
-        client, opener = self.build_client([expired, {"access_token": "CHANGE_ME", "expires_in": 3600}, {"value": []}])
+        client, opener = self.build_client([expired, {"access_token": 'CHANGE_ME', "expires_in": 3600}, {"value": []}])
         self.assertEqual(client.collection("/users/test"), ([], 1))
         self.assertEqual(opener.open.call_count, 3)
         failure = urllib.error.HTTPError("https://login.microsoftonline.com", 400, "invalid", {},

@@ -61,7 +61,7 @@ def last_activity_label(value):
 
 
 def values(row):
-    """Serialize only authoritative directory fields; never calculate CHANGE_ME metrics."""
+    'Serialize only authoritative directory fields; never calculate CHANGE_ME metrics.'
     return [row['learner_id'], row['name'], row['enrollments'][0]['course'],
         row['mean_progress'], row['attendance']['pct'], row['quizzes_attempted'],
         row['quizzes_known'] or None, row['quiz_completion_pct'], row['mean_latest_score'],

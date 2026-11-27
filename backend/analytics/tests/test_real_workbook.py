@@ -79,7 +79,7 @@ class RealWorkbookTests(TestCase):
         cls.digest = hashlib.sha256(REAL.read_bytes()).hexdigest()
         cls.sync_run = run_sync("excel", path=str(REAL))
         cls.expected = independent_totals(REAL)
-        cls.user = User.objects.create_user("viewer", password="CHANGE_ME")
+        cls.user = User.objects.create_user("viewer", password='CHANGE_ME')
         DashboardAccess.objects.create(user=cls.user)
 
     def test_import_success_and_source_unchanged(self):

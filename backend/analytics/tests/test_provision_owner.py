@@ -78,12 +78,12 @@ class ProvisionOwnerTests(TestCase):
     def test_password_change_only_via_explicit_run(self):
         self.write_env(f"username=owner_review\npassword={PW}\n")
         self.run_cmd()
-        self.write_env("username=owner_review\npassword=Another-Synthetic-Pass-2846!\n")
+        self.write_env('username=owner_review\npassword=CHANGE_ME\n')
         # Requests alone never re-provision:
         self.client.get("/api/auth/session")
         self.assertTrue(User.objects.get(username="owner_review").check_password(PW))
         self.run_cmd()
-        self.assertTrue(User.objects.get(username="owner_review").check_password("Another-Synthetic-Pass-2846!"))
+        self.assertTrue(User.objects.get(username="owner_review").check_password('CHANGE_ME'))
 
     def test_refuses_superuser(self):
         User.objects.create_superuser("owner_review", password=PW)

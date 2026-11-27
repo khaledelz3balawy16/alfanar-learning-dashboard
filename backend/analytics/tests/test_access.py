@@ -31,7 +31,7 @@ class DashboardUserTests(TestCase):
 
     def test_active_owner_login_and_session_need_no_grant_or_password_change(self):
         owner = User.objects.create_user('owner_review', password=PW)
-        original_password = CHANGE_ME
+        original_password = owner.password
         self.assertEqual(self.login('owner_review').status_code, 200)
         session = self.client.get('/api/auth/session').json()
         self.assertTrue(session['authenticated'])
@@ -41,7 +41,7 @@ class DashboardUserTests(TestCase):
         self.assertEqual(self.client.get('/api/learners').status_code, 200)
         self.assertEqual(self.client.get('/api/identities').status_code, 200)
         owner.refresh_from_db()
-        self.assertEqual(CHANGE_ME, original_password)
+        self.assertEqual(owner.password, original_password)
         self.assertFalse(owner.is_staff or owner.is_superuser)
         self.assertFalse(DashboardAccess.objects.exists())
         self.assertEqual(User.objects.count(), 1)
@@ -110,7 +110,7 @@ class DashboardUserTests(TestCase):
 
     def test_weak_password_rejected(self):
         with self.assertRaises(CommandError):
-            provision("add", "weak_user", password="CHANGE_ME")
+            provision("add", "weak_user", password='CHANGE_ME')
 
     def test_refuses_to_downgrade_superuser(self):
         User.objects.create_superuser("root_admin", password=PW)

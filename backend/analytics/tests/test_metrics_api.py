@@ -17,7 +17,7 @@ class ApiTestBase(TestCase):
     def setUpTestData(cls):
         cls.tmp = Path(tempfile.mkdtemp())
         run_sync("excel", path=str(write_workbook(cls.tmp / "synthetic.xlsx")))
-        cls.user = User.objects.create_user("viewer", password="CHANGE_ME")
+        cls.user = User.objects.create_user("viewer", password='CHANGE_ME')
         DashboardAccess.objects.create(user=cls.user)
 
     @classmethod
@@ -52,9 +52,9 @@ class SecurityTests(ApiTestBase):
 
     def test_login_flow(self):
         self.client.logout()
-        bad = self.client.post("/api/auth/login", {"username": "viewer", "password": "CHANGE_ME"}, content_type="application/json")
+        bad = self.client.post("/api/auth/login", {"username": "viewer", "password": 'CHANGE_ME'}, content_type="application/json")
         self.assertEqual(bad.status_code, 400)
-        ok = self.client.post("/api/auth/login", {"username": "viewer", "password": "CHANGE_ME"}, content_type="application/json")
+        ok = self.client.post("/api/auth/login", {"username": "viewer", "password": 'CHANGE_ME'}, content_type="application/json")
         self.assertEqual(ok.status_code, 200)
         self.assertEqual(self.client.get("/api/learners").status_code, 200)
 

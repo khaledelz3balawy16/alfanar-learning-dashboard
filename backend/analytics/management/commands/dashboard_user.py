@@ -1,16 +1,4 @@
-r"""Provision and manage dashboard-only accounts (never staff, never superuser).
-
-Passwords are never accepted as command-line arguments (they would leak into
-shell history / process lists). They are read from a hidden interactive prompt
-or, for automation, from stdin.
-
-Examples (PowerShell, from backend\):
-    ..\.venv\Scripts\python manage.py dashboard_user add owner_review --temporary --days 14 --set-password
-    ..\.venv\Scripts\python manage.py dashboard_user add contact@example.com --email contact@example.com --set-password
-    ..\.venv\Scripts\python manage.py dashboard_user set-password owner_review
-    ..\.venv\Scripts\python manage.py dashboard_user disable owner_review
-    ..\.venv\Scripts\python manage.py dashboard_user list
-"""
+'Provision and manage dashboard-only accounts (never staff, never superuser).\n\nPasswords are never accepted as command-line arguments (they would leak into\nshell history / process lists). They are read from a hidden interactive prompt\nor, for automation, from stdin.\n\nExamples (PowerShell, from backend\\):\n    ..\\.venv\\Scripts\\python manage.py dashboard_user add owner_review --temporary --days 14 --set-password\n    ..\\.venv\\Scripts\\python manage.py dashboard_user add contact+2e3ac980f350@example.com --email contact+2e3ac980f350@example.com --set-password\n    ..\\.venv\\Scripts\\python manage.py dashboard_user set-password owner_review\n    ..\\.venv\\Scripts\\python manage.py dashboard_user disable owner_review\n    ..\\.venv\\Scripts\\python manage.py dashboard_user list\n'
 
 import datetime as dt
 import getpass

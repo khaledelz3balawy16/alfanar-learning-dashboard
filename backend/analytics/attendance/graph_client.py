@@ -33,15 +33,15 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 class GraphClient:
-    def __init__(self, tenant, client_id, CHANGE_ME, *, scope=SCOPE, base_url=BASE,
+    def __init__(self, tenant, client_id, client_secret, *, scope=SCOPE, base_url=BASE,
                  opener=None, sleep=time.sleep, clock=time.time):
         try:
             self.tenant, self.client_id = str(uuid.UUID(tenant)), str(uuid.UUID(client_id))
         except (ValueError, TypeError, AttributeError):
             raise GraphError(0, "InvalidTenantOrClientID", operation="configuration") from None
-        if not CHANGE_ME or scope != SCOPE or base_url.rstrip("/") not in (BASE, "https://graph.microsoft.com"):
+        if not client_secret or scope != SCOPE or base_url.rstrip("/") not in (BASE, "https://graph.microsoft.com"):
             raise GraphError(0, "InvalidGraphConfiguration", operation="configuration")
-        self._secret = CHANGE_ME
+        self._secret = client_secret
         self._token, self._expires = None, 0
         self._opener = opener or urllib.request.build_opener(NoRedirect())
         self._sleep, self._clock = sleep, clock
@@ -103,7 +103,7 @@ class GraphClient:
     def authenticate(self):
         if self._token and self._clock() < self._expires:
             return
-        form = urllib.parse.urlencode({"client_id": self.client_id, "CHANGE_ME": self._secret,
+        form = urllib.parse.urlencode({"client_id": self.client_id, "client_secret": self._secret,
                                       "grant_type": "client_credentials", "scope": SCOPE}).encode()
         request = urllib.request.Request(f"https://login.microsoftonline.com/{self.tenant}/oauth2/v2.0/token", data=form,
                                          headers={"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json"})

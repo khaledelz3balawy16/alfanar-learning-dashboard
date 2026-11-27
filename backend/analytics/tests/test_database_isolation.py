@@ -24,7 +24,7 @@ from lecture_library.models import LectureCapture, LectureLearner, LectureResour
 class ConfigurationTests(SimpleTestCase):
     def test_legacy_postgres_url_cannot_redirect_dashboard_or_reuse_old_schema(self):
         base = Path('/application/backend')
-        db, schema = isolated_databases(base, {'DATABASE_URL': 'postgresql://test:test@localhost/example', 'DATABASE_SCHEMA': 'alfanar_dashboard'})
+        db, schema = isolated_databases(base, {'DATABASE_URL': 'postgresql://test:test@localhost/example', 'DATABASE_SCHEMA': 'CHANGE_ME'})
         self.assertEqual(db['default']['ENGINE'], 'django.db.backends.sqlite3')
         self.assertEqual(db['default']['NAME'], (base / 'db.sqlite3').resolve())
         self.assertEqual(db['lecture_library']['ENGINE'], 'django.db.backends.postgresql')
@@ -33,12 +33,12 @@ class ConfigurationTests(SimpleTestCase):
     def test_explicit_paths_take_precedence_and_library_cannot_use_sqlite(self):
         base = Path('/application/backend')
         db, _ = isolated_databases(base, {'DASHBOARD_SQLITE_PATH': 'private/dashboard.sqlite3',
-            'DATABASE_URL': 'postgresql://CHANGE_ME:CHANGE_ME@localhost:5432/portfolio', 'LECTURE_LIBRARY_DATABASE_URL': 'postgresql://CHANGE_ME:CHANGE_ME@localhost:5432/portfolio'})
+            'DATABASE_URL': 'CHANGE_ME', 'LECTURE_LIBRARY_DATABASE_URL': 'CHANGE_ME'})
         self.assertEqual(db['lecture_library']['NAME'], 'new')
         self.assertEqual(db['default']['NAME'], (base.parent / 'private/dashboard.sqlite3').resolve())
         with self.assertRaises(ImproperlyConfigured):
             isolated_databases(base, {'LECTURE_LIBRARY_DATABASE_URL': 'CHANGE_ME'})
-        for schema in ['public', 'alfanar_dashboard', 'pg_catalog', 'x,public']:
+        for schema in ['public', 'CHANGE_ME', 'pg_catalog', 'x,public']:
             with self.subTest(schema=schema), self.assertRaises(ImproperlyConfigured):
                 isolated_databases(base, {'LECTURE_LIBRARY_DATABASE_SCHEMA': schema})
 
@@ -113,11 +113,11 @@ class StorageBoundaryTests(TestCase):
         Enrollment.objects.create(course=self.course, learner=other)
         LectureLearner.objects.create(lecture=self.lecture, learner_source_id=101, source_emails=[other.email], attendance='present')
         self.learner.delete()
-        CHANGE_ME = Learner.objects.create(id=90, source_id=100, name='Synthetic learner', email='synthetic@example.invalid')
-        Enrollment.objects.create(course=self.course, learner=CHANGE_ME)
+        replacement = Learner.objects.create(id=90, source_id=100, name='Synthetic learner', email='synthetic@example.invalid')
+        Enrollment.objects.create(course=self.course, learner=replacement)
         people = {p['learner_id']: p['attendance'] for p in self.client.get(f'/api/lectures/{self.lecture.pk}').json()['participants']}
         self.assertEqual(people, {100: 'present', 101: 'present'})
-        CHANGE_ME.email = 'different@example.invalid'; CHANGE_ME.save()
+        replacement.email = 'different@example.invalid'; replacement.save()
         people = {p['learner_id']: p['attendance'] for p in self.client.get(f'/api/lectures/{self.lecture.pk}').json()['participants']}
         self.assertEqual(people, {100: 'not_available', 101: 'present'})     # never credited to the new email
         # Without the other learner nobody is Present, so the lecture itself is no longer listed.
