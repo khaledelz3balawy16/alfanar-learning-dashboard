@@ -1,0 +1,8 @@
+* text=auto
+*.service text eol=lf
+*.conf text eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+
+# Portfolio snapshots store prepared files directly.
+* -filter

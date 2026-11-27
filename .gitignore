@@ -1,0 +1,75 @@
+# Secrets & local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*service-account*.json
+*credentials*.json
+secrets/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+*.sqlite3-journal
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Source data (confidential learner records)
+data/
+*.xlsx
+*.xls
+*.csv
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Scheduler lock / local logs
+*.lock
+logs/
+
+# Third-party design reference (contains demo/mock learner data) - inspiration only
+design-reference/
+Design Reference/
+[Dd]esign[ -][Rr]eference/
+
+# Generated / local artifacts
+backend/staticfiles/
+*.sqlite3-*
+*.bak
+*.dump
+*.zip
+pw*.txt
+*password*
+
+# Portfolio: local runtime credentials, data, and caches
+.env
+.env.*
+!.env.example
+!.env.*.example
+!*.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.log
+node_modules/
+.venv/
+__pycache__/
